@@ -1,0 +1,17 @@
+{
+  "name": "circular-slider",
+  "version": "1.0.0",
+  "description": "Circular slider example",
+  "main": "index.js",
+  "repository": "https://github.com/JercSi/circle-slider.git",
+  "author": "Jernej Lekše <someone.is.alive@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "sass": "^1.44.0"
+  },
+  "scripts": {
+    "build": "sass --no-source-map .\\css\\main.scss .\\dist\\css\\main.css",
+    "watch": "sass --watch .\\css\\main.scss .\\dist\\css\\main.css"
+  }
+}
