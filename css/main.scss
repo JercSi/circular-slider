@@ -1,0 +1,33 @@
+.cs-slider {
+    background: rgb(240,240,240);
+    background: linear-gradient(175deg, rgba(240,240,240,1) 0%, rgba(202,203,205,1) 100%);
+}
+
+.cs-legend {
+    display: flex;
+    flex-direction: column;
+
+    .cs-legend-item {
+        align-items: baseline;
+        display: flex;
+
+        &--color {
+            height: 16px;
+            margin: 0 10px;
+            width: 30px;
+        }
+    
+        &--title {
+            flex-basis: 50%;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        &--value {
+            flex-basis: 50%;
+            font-size: 40px;
+            font-weight: bold;
+            text-align: right;
+        }
+    }
+}
