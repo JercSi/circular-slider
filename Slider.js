@@ -89,15 +89,15 @@ class CircleSlider {
             point.x = event.clientX;
             point.y = event.clientY;
         } else if ("touchmove" === event.type) {
-            point.x = event.touches[0].pageX;
-            point.y = event.touches[0].pageY;
+            point.x = event.touches[0].clientX;
+            point.y = event.touches[0].clientY;
         }
 
         // Get the middle point of a slider
         let svg = document.querySelector(".cs-slides svg").getBoundingClientRect();
         let middle_point = {
-            x: svg.left + (this.width / 2),
-            y: svg.top + (this.height / 2),
+            x: svg.left + (svg.width / 2),
+            y: svg.top + (svg.height / 2),
         }
 
         let angle = Math.atan2(point.y - middle_point.y, point.x - middle_point.x);
