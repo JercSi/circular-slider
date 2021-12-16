@@ -115,6 +115,11 @@ class CircleSlider {
         list.classList.add("cs-legend");
 
         this.slides.forEach((slide, index) => {
+            if (undefined === slide?.value) {
+                // Default value not defined, use minimum value
+                this.slides[index].value = slide.min;
+            }
+
             // Slide wrapper
             let list_item = document.createElement("div");
             list_item.classList.add("cs-legend-item");
