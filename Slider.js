@@ -120,6 +120,11 @@ class CircleSlider {
                 this.slides[index].value = slide.min;
             }
 
+            if (undefined === slide?.title) {
+                // Title is not set
+                this.slides[index].title = "Not set";
+            }
+
             // Slide wrapper
             let list_item = document.createElement("div");
             list_item.classList.add("cs-legend-item");
