@@ -180,6 +180,7 @@ class CircleSlider {
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute("height", this.height);
         svg.setAttribute("width", this.width);
+        svg.setAttribute("viewBox", `0 0 ${this.width} ${this.height}`);
 
 
         this.slides.forEach((slide, index) => {
