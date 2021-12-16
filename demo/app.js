@@ -1,4 +1,4 @@
-import CircleSlider from "./Slider.js";
+import CircleSlider from "../Slider.js";
 
 const chart_data = [];
 
