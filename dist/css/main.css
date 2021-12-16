@@ -5,6 +5,10 @@
   display: flex;
   justify-content: space-around;
 }
+.cs-slider.error {
+  color: #ff0000;
+  padding: 50px 0;
+}
 
 .cs-legend {
   display: flex;

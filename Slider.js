@@ -31,9 +31,15 @@ class CircleSlider {
         this.almost_reached_max_value = false; // Has slider almost reached the end?
         this.almost_reached_min_value = false; // Has slider almost reached the start?
 
-        // Creates slides and a legend
-        this.createLegend();
-        this.createSlides();
+        let are_slides_valid = this.validateSlides();
+        if (true === are_slides_valid) {
+            // Creates slides and a legend
+            this.createLegend();
+            this.createSlides();
+        } else {
+            this.selector.classList.add("error");
+            this.selector.innerHTML = "Slide does not have all required properties (max, min, radius, step)<br />" + JSON.stringify(are_slides_valid);
+        }
     }
 
     /**
@@ -340,6 +346,29 @@ class CircleSlider {
         this.almost_reached_max_value = this.slides[this.moving_index].angle > (CIRCLE_IN_RADIANS - (Math.PI / 4));
         this.almost_reached_min_value = this.slides[this.moving_index].angle < (Math.PI / 4);
     }
+
+    /**
+     * Slides Object should have minimum required data for display
+     * @returns {Boolean|Object} true when all slides are valid; Object (slide) when error
+     */
+    validateSlides = () => {
+        let is_valid = true;
+
+        // Check all objects in a list
+        for (let index in this.slides) {
+            let slide = Object.keys(this.slides[index]);
+
+            if ((false === slide.includes("max")) ||
+                (false === slide.includes("min")) ||
+                (false === slide.includes("radius")) ||
+                (false === slide.includes("step"))) {
+                is_valid = this.slides[index];
+                break;
+            }
+        };
+
+        return is_valid;
+    };
 };
 
 export default CircleSlider;

@@ -4,6 +4,11 @@
     background: linear-gradient(175deg, rgba(240,240,240,1) 0%, rgba(202,203,205,1) 100%);
     display: flex;
     justify-content: space-around;
+
+    &.error {
+        color: #ff0000;
+        padding: 50px 0;
+    }
 }
 
 .cs-legend {
