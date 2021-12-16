@@ -1,11 +1,15 @@
 .cs-slider {
+    align-items: center;
     background: rgb(240,240,240);
     background: linear-gradient(175deg, rgba(240,240,240,1) 0%, rgba(202,203,205,1) 100%);
+    display: flex;
+    justify-content: space-around;
 }
 
 .cs-legend {
     display: flex;
     flex-direction: column;
+    width: 30%;
 
     .cs-legend-item {
         align-items: baseline;
@@ -29,5 +33,50 @@
             font-weight: bold;
             text-align: right;
         }
+    }
+}
+
+.cs-slides {
+    touch-action: none;
+    width: 70%;
+
+    svg {
+        // Rotate slider for -90deg to start slider from top and not from right side
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        -ms-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+    }
+
+    // Not active circle ... background circle
+    .cs-back {
+        stroke: rgb(163, 163, 163);
+    }
+
+    // Default circle configuration
+    .cs-circle {
+        fill: none;
+        stroke-width: 18;
+    }
+    
+    // Dot / circle to change slider value
+    .cs-dot {
+        cursor: pointer; 
+        fill: #fff;
+        stroke: #cacbcd;
+        stroke-width: 2;
+    }
+}
+
+// Smaller screens
+@media (max-width: 600px) { 
+    .cs-slider {
+        display: block;
+    }
+
+    .cs-legend,
+    .cs-slides {
+        width: 100%;
     }
 }

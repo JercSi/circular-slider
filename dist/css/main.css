@@ -1,0 +1,71 @@
+.cs-slider {
+  align-items: center;
+  background: #f0f0f0;
+  background: linear-gradient(175deg, #f0f0f0 0%, #cacbcd 100%);
+  display: flex;
+  justify-content: space-around;
+}
+
+.cs-legend {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+}
+.cs-legend .cs-legend-item {
+  align-items: baseline;
+  display: flex;
+}
+.cs-legend .cs-legend-item--color {
+  height: 16px;
+  margin: 0 10px;
+  width: 30px;
+}
+.cs-legend .cs-legend-item--title {
+  flex-basis: 50%;
+  font-size: 16px;
+  text-align: left;
+}
+.cs-legend .cs-legend-item--value {
+  flex-basis: 50%;
+  font-size: 40px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.cs-slides {
+  touch-action: none;
+  width: 70%;
+}
+.cs-slides svg {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+.cs-slides .cs-back {
+  stroke: #a3a3a3;
+}
+.cs-slides .cs-circle {
+  fill: none;
+  stroke-width: 18;
+}
+.cs-slides .cs-dot {
+  cursor: pointer;
+  fill: #fff;
+  stroke: #cacbcd;
+  stroke-width: 2;
+}
+
+@media (max-width: 600px) {
+  .cs-slider {
+    display: block;
+  }
+
+  .cs-legend,
+.cs-slides {
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=main.css.map */
