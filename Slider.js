@@ -5,7 +5,6 @@ const DEFAULT_COLOR = "#FF00FF"; // Default (fallback) slider color
 const NUMBER_FORMAT_LOCALES = 'en-US'; // Number format localization
 const NUMBER_FORMAT_OPTIONS = {currency: 'USD', maximumFractionDigits: 0, style: 'currency'}; // Number format options
 
-
 class CircleSlider {
     constructor(data = {}) {
         // Element selector
@@ -31,16 +30,24 @@ class CircleSlider {
         this.almost_reached_max_value = false; // Has slider almost reached the end?
         this.almost_reached_min_value = false; // Has slider almost reached the start?
 
+        // Run validation on slides properties
         let are_slides_valid = this.validateSlides();
-        if (true === are_slides_valid) {
+        // and radius between the slides
+        let radius_check = this.validateRadius();
+
+        if ((true === are_slides_valid) && (true === radius_check)) {
             // Creates slides and a legend
             this.createLegend();
             this.createSlides();
         } else {
             this.selector.classList.add("error");
-            this.selector.innerHTML = "Slide does not have all required properties (max, min, radius, step)<br />" + JSON.stringify(are_slides_valid);
+            if (true === radius_check) {
+                this.selector.innerHTML = "Slide does not have all required properties (max, min, radius, step)<br />" + JSON.stringify(are_slides_valid);
+            } else {
+                this.selector.innerHTML = radius_check;
+            }
         }
-    }
+    };
 
     /**
      * Calculate angle from current and max value
@@ -93,7 +100,7 @@ class CircleSlider {
         }
 
         return angle;
-    }
+    };
 
     /**
      * Calculate value from angle
@@ -111,7 +118,7 @@ class CircleSlider {
 
         // Calculate the value
         return slide.min + (slide.step * number_of_steps);
-    }
+    };
 
     /**
      * Create legend
@@ -255,7 +262,7 @@ class CircleSlider {
         // Return path for a arc
         return `M ${(width / 2) + radius} ${height / 2}
                 A ${radius} ${radius} 0 ${angle_draw} 1 ${(radius * Math.cos(angle)) + (width / 2)} ${(radius * Math.sin(angle)) + (height / 2)}`;
-    }
+    };
 
     /**
      * Format value with currency formatting 
@@ -264,7 +271,7 @@ class CircleSlider {
      */
     getFormattedValue = (value) => {
         return new Intl.NumberFormat(NUMBER_FORMAT_LOCALES, NUMBER_FORMAT_OPTIONS).format(value);
-    }
+    };
 
     /**
      * Touch or mouse event completed
@@ -275,7 +282,7 @@ class CircleSlider {
         this.moving_index = null;
         this.almost_reached_max_value = false;
         this.almost_reached_min_value = false;
-    }
+    };
 
     /**
      * Touch or mouse event - moving.
@@ -325,7 +332,7 @@ class CircleSlider {
 
             document.querySelector(`.cs-legend-item[data-index="${this.moving_index}"] .cs-legend-item--value`).innerHTML = this.getFormattedValue(this.slides[this.moving_index].value);
         }
-    }
+    };
 
     /**
      * Touch or mouse event started
@@ -335,7 +342,7 @@ class CircleSlider {
         this.is_moving = true;
         this.moving_index = event.target.dataset.index;
         this.updateBounds();
-    }
+    };
 
     /**
      * Update state if user has almost reached the start or end of the slider.
@@ -345,7 +352,42 @@ class CircleSlider {
     updateBounds = () => {
         this.almost_reached_max_value = this.slides[this.moving_index].angle > (CIRCLE_IN_RADIANS - (Math.PI / 4));
         this.almost_reached_min_value = this.slides[this.moving_index].angle < (Math.PI / 4);
-    }
+    };
+
+    /**
+     * To make a sliders "perfect", radius can't be smaller than 20.
+     * Radius between each slider must be at least 20.
+     * @returns {Boolean|String} true when all radiuses are ok, string: error message
+     */
+    validateRadius = () => {
+        // List of radiuses
+        let radiuses = [];
+
+        for (let index in this.slides) {
+            // Add all radiuses to the array
+            radiuses.push(this.slides[index].radius);
+        }
+
+        // Sort radiuses 
+        radiuses.sort(function (a, b) {
+            return a - b;
+        });
+
+        // Check if smallest 
+        if (radiuses[0] < 20) {
+            // Smallest radius can't be less than 20
+            return "Radius can not be smaller than 20.";
+        }
+
+        // Difference between each slide must be at least 20.
+        for (let i = 1; i < radiuses.length; i++) {
+            if ((radiuses[i] - radiuses[i - 1]) < 20) {
+                return "Radius between the slides is less than 20.";
+            }
+        }
+
+        return true;
+    };
 
     /**
      * Slides Object should have minimum required data for display
