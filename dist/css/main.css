@@ -33,6 +33,8 @@
 }
 
 .cs-slides {
+  display: flex;
+  justify-content: center;
   touch-action: none;
   width: 70%;
 }
