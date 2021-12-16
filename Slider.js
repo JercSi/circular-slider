@@ -36,6 +36,14 @@ class CircleSlider {
         let radius_check = this.validateRadius();
 
         if ((true === are_slides_valid) && (true === radius_check)) {
+            // Get max radius, to expand the container sizes
+            let max_radius = Math.max.apply(Math, this.slides.map(function(o) { return o.radius; })) * 2;
+            if (max_radius > 370) {
+                // Expand the container are and add additional 30px margin
+                this.height = max_radius + 30;
+                this.width = max_radius + 30;
+            }
+
             // Creates slides and a legend
             this.createLegend();
             this.createSlides();
