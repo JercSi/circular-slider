@@ -1,4 +1,4 @@
-import {degToRad, radToDeg} from "./Utils.js";
+import {degToRad} from "./Utils.js";
 
 const CIRCLE_IN_RADIANS = (Math.PI * 2); // Circle in radians
 const DEFAULT_COLOR = "#FF00FF"; // Default (fallback) slider color
@@ -30,12 +30,12 @@ class CircleSlider {
         this.almost_reached_max_value = false; // Has slider almost reached the end?
         this.almost_reached_min_value = false; // Has slider almost reached the start?
 
-        // Run validation on slides properties
-        let are_slides_valid = this.validateSlides();
-        // and radius between the slides
-        let radius_check = this.validateRadius();
+        try {
+            // Run validation on slides properties
+            this.validateSlides();
+            // and radius between the slides
+            this.validateRadius();
 
-        if ((true === are_slides_valid) && (true === radius_check)) {
             // Get max radius, to expand the container sizes
             let max_radius = Math.max.apply(Math, this.slides.map(function(o) { return o.radius; })) * 2;
             if (max_radius > 370) {
@@ -47,22 +47,18 @@ class CircleSlider {
             // Creates slides and a legend
             this.createLegend();
             this.createSlides();
-        } else {
+        } catch (error) {
             this.selector.classList.add("error");
-            if (true === radius_check) {
-                this.selector.innerHTML = "Slide does not have all required properties (max, min, radius, step)<br />" + JSON.stringify(are_slides_valid);
-            } else {
-                this.selector.innerHTML = radius_check;
-            }
+            this.selector.innerHTML = error;
         }
     };
 
     /**
      * Calculate angle from current and max value
-     * @param {Number} min Min slide value
-     * @param {Number} max Max slide value
-     * @param {Number} current Current slide value
-     * @returns {Number} Angle in radians
+     * @param {number} min Min slide value
+     * @param {number} max Max slide value
+     * @param {number} current Current slide value
+     * @returns {number} Angle in radians
      */
     calculateAngle = (min, max, current) => {
         // Use min and max value and current value to get fill percentage
@@ -76,7 +72,7 @@ class CircleSlider {
     /**
      * Calculate angle between svg center point and cursor / touch.
      * @param {MouseEvent|TouchEvent} event 
-     * @returns {Number} Angle in radians
+     * @returns {number} Angle in radians
      */
     calculateNewAngle = (event) => {
         let point = {
@@ -112,9 +108,9 @@ class CircleSlider {
 
     /**
      * Calculate value from angle
-     * @param {Number} angle Angle in radians
-     * @param {Object} slide Slide details
-     * @returns {Number} Value
+     * @param {number} angle Angle in radians
+     * @param {object} slide Slide details
+     * @returns {number} Value
      */
     calculateValueFromAngle = (angle, slide) => {
         if (CIRCLE_IN_RADIANS === angle) {
@@ -250,11 +246,11 @@ class CircleSlider {
     
     /**
      * Get arc or circle path
-     * @param {Number} radius Radius
-     * @param {Number} angle Angle
-     * @param {Number} width Container width
-     * @param {Number} height Container height
-     * @returns {String} Svg Path
+     * @param {number} radius Radius
+     * @param {number} angle Angle
+     * @param {number} width Container width
+     * @param {number} height Container height
+     * @returns {string} Svg Path
      */
     getArcPath = (radius, angle, width, height) => {
         if (CIRCLE_IN_RADIANS === angle) {
@@ -275,8 +271,8 @@ class CircleSlider {
 
     /**
      * Format value with currency formatting 
-     * @param {Number} value Value to be formatted
-     * @returns {String} Formatted value
+     * @param {number} value Value to be formatted
+     * @returns {string} Formatted value
      */
     getFormattedValue = (value) => {
         return new Intl.NumberFormat(NUMBER_FORMAT_LOCALES, NUMBER_FORMAT_OPTIONS).format(value);
@@ -366,7 +362,8 @@ class CircleSlider {
     /**
      * To make a sliders "perfect", radius can't be smaller than 20.
      * Radius between each slider must be at least 20.
-     * @returns {Boolean|String} true when all radiuses are ok, string: error message
+     * @returns {boolean} true when all radiuses are ok
+     * @throws Exception when radius is too small between the slides
      */
     validateRadius = () => {
         // List of radiuses
@@ -385,13 +382,13 @@ class CircleSlider {
         // Check if smallest 
         if (radiuses[0] < 20) {
             // Smallest radius can't be less than 20
-            return "Radius can not be smaller than 20.";
+            throw "Radius can not be smaller than 20.";
         }
 
         // Difference between each slide must be at least 20.
         for (let i = 1; i < radiuses.length; i++) {
             if ((radiuses[i] - radiuses[i - 1]) < 20) {
-                return "Radius between the slides is less than 20.";
+                throw "Radius between the slides is less than 20.";
             }
         }
 
@@ -400,11 +397,10 @@ class CircleSlider {
 
     /**
      * Slides Object should have minimum required data for display
-     * @returns {Boolean|Object} true when all slides are valid; Object (slide) when error
+     * @returns {boolean} true when all slides are valid
+     * @throws Exception when one slide does not have all required properties
      */
     validateSlides = () => {
-        let is_valid = true;
-
         // Check all objects in a list
         for (let index in this.slides) {
             let slide = Object.keys(this.slides[index]);
@@ -413,12 +409,11 @@ class CircleSlider {
                 (false === slide.includes("min")) ||
                 (false === slide.includes("radius")) ||
                 (false === slide.includes("step"))) {
-                is_valid = this.slides[index];
-                break;
+                throw "Slide does not have all required properties (max, min, radius, step)<br />" + JSON.stringify(this.slides[index]);
             }
         };
 
-        return is_valid;
+        return true;
     };
 };
 
